@@ -27,7 +27,7 @@ __version__ = '1.1'
 #  loadRes    - Load algorithm results and create API for accessing them.
 # Throughout the API "ann"=annotation, "cat"=category, and "img"=image.
 
-# COCO-Text Toolbox.        Version 1.0.1
+# COCO-Text Toolbox.        Version 1.1
 # Data and  paper available at:  http://vision.cornell.edu/se3/coco-text/
 # Code based on Microsoft COCO Toolbox Version 1.0 by Piotr Dollar and Tsung-Yi Lin
 # extended and adapted by Andreas Veit, 2016.
