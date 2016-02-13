@@ -5,7 +5,7 @@ __version__ = '1.0.1'
 # COCO-Text is a large dataset designed for text detection and recognition.
 # This is a Python API that assists in loading, parsing and visualizing the 
 # annotations. The format of the COCO-Text annotations is also described on 
-# the project website WEBSITE. In addition to this API, please download both
+# the project website http://vision.cornell.edu/se3/coco-text/. In addition to this API, please download both
 # the COCO images and annotations.
 # This dataset is based on Microsoft COCO. Please visit http://mscoco.org/
 # for more information on COCO, including for the image data, object annotatins
@@ -27,8 +27,8 @@ __version__ = '1.0.1'
 #  loadRes    - Load algorithm results and create API for accessing them.
 # Throughout the API "ann"=annotation, "cat"=category, and "img"=image.
 
-# COCO-Text Toolbox.        Version 1.0
-# Data and  paper available at:  WEBSITE
+# COCO-Text Toolbox.        Version 1.0.1
+# Data and  paper available at:  http://vision.cornell.edu/se3/coco-text/
 # Code based on Microsoft COCO Toolbox Version 1.0 by Piotr Dollar and Tsung-Yi Lin
 # extended and adapted by Andreas Veit, 2016.
 # Licensed under the Simplified BSD License [see bsd.txt]
