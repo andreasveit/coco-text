@@ -1,5 +1,5 @@
 __author__ = 'andreasveit'
-__version__ = '1.0.1'
+__version__ = '1.1'
 # Interface for accessing the COCO-Text dataset.
 
 # COCO-Text is a large dataset designed for text detection and recognition.
