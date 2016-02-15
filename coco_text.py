@@ -167,7 +167,6 @@ class COCO_Text:
         :param anns (array of object): annotations to display
         :return: None
         """
-        assert float(self.dataset['info']['version']) >= 1.1, 'Please get the newest version of the dataset. Visualizations are only available from version 1.1. Your version is %s.'%(self.dataset['info']['version'])
         if len(anns) == 0:
             return 0
         ax = plt.gca()
