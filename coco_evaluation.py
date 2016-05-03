@@ -138,7 +138,7 @@ def evaluateEndToEnd(groundtruth, evaluation, imgIds = [], annIds = [], detectio
 						eval_val = decode(evaluation.anns[eval_box_id]['utf8_string'])
 						if editdistance.eval(gt_val, eval_val)==0:
 							break
-			if match:
+			if match is not None:
 				detectRes['true_positives'].append({'gt_id': gt_box_id, 'eval_id': eval_box_id})
 				eval_bboxes.remove(eval_box_id)
 			else:
