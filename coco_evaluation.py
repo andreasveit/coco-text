@@ -59,13 +59,15 @@ def getDetections(groundtruth, evaluation, imgIds = [], annIds = [], detection_t
 				iou = iou_score(gt_box,eval_box)
 				if iou > max_iou:
 					match = eval_box_id
-			if match:
-				detectRes['true_positives'].append({'gt_id': gt_box_id, 'eval_id': eval_box_id})
-				eval_bboxes.remove(eval_box_id)
+					max_iou = iou
+			if match is not None:
+				detectRes['true_positives'].append({'gt_id': gt_box_id, 'eval_id': match})
+				eval_bboxes.remove(match)
 			else:
 				detectRes['false_negatives'].append({'gt_id': gt_box_id})
 		if len(eval_bboxes)>0:
-			detectRes['false_positives'].append({'eval_id': eval_box_id for eval_box_id in eval_bboxes})
+			for eval_box_id in eval_bboxes: 
+				detectRes['false_positives'].append({'eval_id': eval_box_id})
 
 	return detectRes
 
@@ -134,17 +136,19 @@ def evaluateEndToEnd(groundtruth, evaluation, imgIds = [], annIds = [], detectio
 
 				if iou > max_iou:
 					match = eval_box_id
+					max_iou = iou
 					if 'utf8_string' in evaluation.anns[eval_box_id]:
 						eval_val = decode(evaluation.anns[eval_box_id]['utf8_string'])
 						if editdistance.eval(gt_val, eval_val)==0:
 							break
 			if match is not None:
-				detectRes['true_positives'].append({'gt_id': gt_box_id, 'eval_id': eval_box_id})
-				eval_bboxes.remove(eval_box_id)
+				detectRes['true_positives'].append({'gt_id': gt_box_id, 'eval_id': match})
+				eval_bboxes.remove(match)
 			else:
 				detectRes['false_negatives'].append({'gt_id': gt_box_id})
 		if len(eval_bboxes)>0:
-			detectRes['false_positives'].append({'eval_id': eval_box_id for eval_box_id in eval_bboxes})
+			for eval_box_id in eval_bboxes: 
+				detectRes['false_positives'].append({'eval_id': eval_box_id})
 
 	resultDict = detectRes
 
