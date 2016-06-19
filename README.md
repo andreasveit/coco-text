@@ -1,4 +1,6 @@
 # coco-text
+Update: Make sure to update and use evaluation script version 1.3
+
 COCO-Text API http://vision.cornell.edu/se3/coco-text/
 
 COCO-Text is a large dataset designed for text detection and recognition. This is a Python API that assists in loading, parsing and visualizing the annotations. The format of the COCO-Text annotations is also described on 
