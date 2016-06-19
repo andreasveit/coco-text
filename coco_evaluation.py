@@ -66,7 +66,7 @@ def getDetections(groundtruth, evaluation, imgIds = [], annIds = [], detection_t
 			else:
 				detectRes['false_negatives'].append({'gt_id': gt_box_id})
 		if len(eval_bboxes)>0:
-			detectRes['false_positives'].append({'eval_id': eval_box_id for eval_box_id in eval_bboxes})
+			detectRes['false_positives'].extend([{'eval_id': eval_box_id} for eval_box_id in eval_bboxes])
 
 	return detectRes
 
@@ -146,7 +146,7 @@ def evaluateEndToEnd(groundtruth, evaluation, imgIds = [], annIds = [], detectio
 			else:
 				detectRes['false_negatives'].append({'gt_id': gt_box_id})
 		if len(eval_bboxes)>0:
-			detectRes['false_positives'].append({'eval_id': eval_box_id for eval_box_id in eval_bboxes})
+			detectRes['false_positives'].extend([{'eval_id': eval_box_id} for eval_box_id in eval_bboxes])
 
 	resultDict = detectRes
 
