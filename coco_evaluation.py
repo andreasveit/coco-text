@@ -45,7 +45,7 @@ def getDetections(groundtruth, evaluation, imgIds = None, annIds = [], detection
 	detectRes['false_positives'] = []
 	
 	# the default is set to evaluate on the validation set
-	if len(imgIds) == None:
+	if imgIds == None:
 		imgIds = groundtruth.val
 
 	imgIds = imgIds if len(imgIds)>0 else inter(groundtruth.imgToAnns.keys(), evaluation.imgToAnns.keys())
@@ -118,7 +118,7 @@ def evaluateEndToEnd(groundtruth, evaluation, imgIds = None, annIds = [], detect
 	detectRes['false_positives'] = []
 	
 	# the default is set to evaluate on the validation set
-	if len(imgIds) == None:
+	if imgIds == None:
 		imgIds = groundtruth.val
 
 	imgIds = imgIds if len(imgIds)>0 else inter(groundtruth.imgToAnns.keys(), evaluation.imgToAnns.keys())
