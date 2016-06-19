@@ -1,5 +1,5 @@
 __author__ = 'andreasveit'
-__version__ = '1.2'
+__version__ = '1.3'
 
 # Interface for evaluating with the COCO-Text dataset.
 
@@ -19,7 +19,7 @@ __version__ = '1.2'
 #  area, intersect, iou_score, decode, inter  -  small helper functions
 #  printDetailedResults   - Prints detailed results as reported in COCO-Text paper
 
-# COCO-Text Evaluation Toolbox.        Version 1.2
+# COCO-Text Evaluation Toolbox.        Version 1.3
 # Data, Data API and paper available at:  http://vision.cornell.edu/se3/coco-text/
 # Code written by Andreas Veit, 2016.
 # Licensed under the Simplified BSD License [see bsd.txt]
@@ -29,7 +29,7 @@ import copy
 import re
 
 # Compute detections
-def getDetections(groundtruth, evaluation, imgIds = [], annIds = [], detection_threshold = 0.5):
+def getDetections(groundtruth, evaluation, imgIds = None, annIds = [], detection_threshold = 0.5):
 	"""
 	A box is a match iff the intersection of union score is >= 0.5.
 	Params
@@ -43,12 +43,16 @@ def getDetections(groundtruth, evaluation, imgIds = [], annIds = [], detection_t
 	detectRes['true_positives'] = []
 	detectRes['false_negatives'] = []
 	detectRes['false_positives'] = []
+	
+	# the default is set to evaluate on the validation set
+	if len(imgIds) == None:
+		imgIds = groundtruth.val
 
 	imgIds = imgIds if len(imgIds)>0 else inter(groundtruth.imgToAnns.keys(), evaluation.imgToAnns.keys())
 
 	for cocoid in imgIds:
-		gt_bboxes = groundtruth.imgToAnns[cocoid]
-		eval_bboxes = copy.copy(evaluation.imgToAnns[cocoid])
+		gt_bboxes = groundtruth.imgToAnns[cocoid] if cocoid in groundtruth.imgToAnns else []
+		eval_bboxes = copy.copy(evaluation.imgToAnns[cocoid]) if cocoid in evaluation.imgToAnns else []
 
 		for gt_box_id in gt_bboxes:
 			gt_box = groundtruth.anns[gt_box_id]['bbox']
@@ -98,7 +102,7 @@ def evaluateAttribute(groundtruth, evaluation, resultDict, attributes):
 		res[attribute] = {'attribute': attribute, 'correct':len(correct), 'incorrect':len(incorrect), 'accuracy':len(correct)*1.0/len(correct+incorrect)}
 	return res
 
-def evaluateEndToEnd(groundtruth, evaluation, imgIds = [], annIds = [], detection_threshold = 0.5):
+def evaluateEndToEnd(groundtruth, evaluation, imgIds = None, annIds = [], detection_threshold = 0.5):
 	"""
 	A box is a match iff the intersection of union score is >= 0.5.
 	Params
@@ -112,12 +116,16 @@ def evaluateEndToEnd(groundtruth, evaluation, imgIds = [], annIds = [], detectio
 	detectRes['true_positives'] = []
 	detectRes['false_negatives'] = []
 	detectRes['false_positives'] = []
+	
+	# the default is set to evaluate on the validation set
+	if len(imgIds) == None:
+		imgIds = groundtruth.val
 
 	imgIds = imgIds if len(imgIds)>0 else inter(groundtruth.imgToAnns.keys(), evaluation.imgToAnns.keys())
 
 	for cocoid in imgIds:
-		gt_bboxes = groundtruth.imgToAnns[cocoid]
-		eval_bboxes = copy.copy(evaluation.imgToAnns[cocoid])
+		gt_bboxes = groundtruth.imgToAnns[cocoid] if cocoid in groundtruth.imgToAnns else []
+		eval_bboxes = copy.copy(evaluation.imgToAnns[cocoid]) if cocoid in evaluation.imgToAnns else []
 
 		for gt_box_id in gt_bboxes:
 
