@@ -57,6 +57,7 @@ class COCO_Text:
         self.imgs = {}
         self.cats = {}
         self.val = []
+        self.test = []
         self.train = []
         if not annotation_file == None:
             assert os.path.isfile(annotation_file), "file does not exist"
@@ -75,6 +76,7 @@ class COCO_Text:
         self.anns      = {int(annid): self.dataset['anns'][annid] for annid in self.dataset['anns']}
         self.cats      = self.dataset['cats']
         self.val       = [int(cocoid) for cocoid in self.dataset['imgs'] if self.dataset['imgs'][cocoid]['set'] == 'val']
+        self.test      = [int(cocoid) for cocoid in self.dataset['imgs'] if self.dataset['imgs'][cocoid]['set'] == 'test']
         self.train     = [int(cocoid) for cocoid in self.dataset['imgs'] if self.dataset['imgs'][cocoid]['set'] == 'train']
         print 'index created!'
 
