@@ -37,7 +37,8 @@ import json
 import datetime
 import matplotlib.pyplot as plt
 from matplotlib.collections import PatchCollection
-from matplotlib.patches import Rectangle
+from matplotlib.patches import Rectangle, PathPatch
+from matplotlib.path import Path
 import numpy as np
 import copy
 import os
@@ -163,7 +164,7 @@ class COCO_Text:
         elif type(ids) == int:
             return [self.imgs[ids]]
 
-    def showAnns(self, anns):
+    def showAnns(self, anns, show_polygon=False):
         """
         Display the specified annotations.
         :param anns (array of object): annotations to display
@@ -172,16 +173,25 @@ class COCO_Text:
         if len(anns) == 0:
             return 0
         ax = plt.gca()
-        rectangles = []
+        boxes = []
         color = []
         for ann in anns:
             c = np.random.random((1, 3)).tolist()[0]
-            left, top, width, height = ann['bbox']
-            rectangles.append(Rectangle([left,top],width,height,alpha=0.4))
+            if show_polygon:
+                tl_x, tl_y, tr_x, tr_y, br_x, br_y, bl_x, bl_y = ann['polygon']
+                verts = [(tl_x, tl_y), (tr_x, tr_y), (br_x, br_y), (bl_x, bl_y), (0, 0)]
+                codes = [Path.MOVETO, Path.LINETO, Path.LINETO, Path.LINETO, Path.CLOSEPOLY]
+                path = Path(verts, codes)
+                patch = PathPatch(path, facecolor='none')
+                boxes.append(patch)
+                left, top = tl_x, tl_y
+            else:
+                left, top, width, height = ann['bbox']
+                boxes.append(Rectangle([left,top],width,height,alpha=0.4))
             color.append(c)
             if 'utf8_string' in ann.keys():
                 ax.annotate(ann['utf8_string'],(left,top-4),color=c)
-        p = PatchCollection(rectangles, facecolors=color, edgecolors=(0,0,0,1), linewidths=3, alpha=0.4)
+        p = PatchCollection(boxes, facecolors=color, edgecolors=(0,0,0,1), linewidths=3, alpha=0.4)
         ax.add_collection(p)
 
     def loadRes(self, resFile):
