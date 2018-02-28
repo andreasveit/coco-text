@@ -1,3 +1,7 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 __author__ = 'andreasveit'
 __version__ = '1.1'
 # Interface for accessing the COCO-Text dataset.
@@ -62,16 +66,16 @@ class COCO_Text:
         self.train = []
         if not annotation_file == None:
             assert os.path.isfile(annotation_file), "file does not exist"
-            print 'loading annotations into memory...'
+            print('loading annotations into memory...')
             time_t = datetime.datetime.utcnow()
             dataset = json.load(open(annotation_file, 'r'))
-            print datetime.datetime.utcnow() - time_t
+            print(datetime.datetime.utcnow() - time_t)
             self.dataset = dataset
             self.createIndex()
 
     def createIndex(self):
         # create index
-        print 'creating index...'
+        print('creating index...')
         self.imgToAnns = {int(cocoid): self.dataset['imgToAnns'][cocoid] for cocoid in self.dataset['imgToAnns']}
         self.imgs      = {int(cocoid): self.dataset['imgs'][cocoid] for cocoid in self.dataset['imgs']}
         self.anns      = {int(annid): self.dataset['anns'][annid] for annid in self.dataset['anns']}
@@ -79,7 +83,7 @@ class COCO_Text:
         self.val       = [int(cocoid) for cocoid in self.dataset['imgs'] if self.dataset['imgs'][cocoid]['set'] == 'val']
         self.test      = [int(cocoid) for cocoid in self.dataset['imgs'] if self.dataset['imgs'][cocoid]['set'] == 'test']
         self.train     = [int(cocoid) for cocoid in self.dataset['imgs'] if self.dataset['imgs'][cocoid]['set'] == 'train']
-        print 'index created!'
+        print('index created!')
 
     def info(self):
         """
@@ -87,7 +91,7 @@ class COCO_Text:
         :return:
         """
         for key, value in self.dataset['info'].items():
-            print '%s: %s'%(key, value)
+            print('%s: %s'%(key, value))
 
     def filtering(self, filterDict, criteria):
         return [key for key in filterDict if all(criterion(filterDict[key]) for criterion in criteria)]
@@ -114,12 +118,12 @@ class COCO_Text:
         catIds = catIds if type(catIds) == list else [catIds]
 
         if len(imgIds) == len(catIds) == len(areaRng) == 0:
-            anns = self.anns.keys()
+            anns = list(self.anns.keys())
         else:
             if not len(imgIds) == 0:
                 anns = sum([self.imgToAnns[imgId] for imgId in imgIds if imgId in self.imgToAnns],[])
             else:
-                anns = self.anns.keys()
+                anns = list(self.anns.keys())
             anns = anns if len(catIds)  == 0 else list(set(anns).intersection(set(self.getAnnByCat(catIds)))) 
             anns = anns if len(areaRng) == 0 else [ann for ann in anns if self.anns[ann]['area'] > areaRng[0] and self.anns[ann]['area'] < areaRng[1]]
         return anns
@@ -135,7 +139,7 @@ class COCO_Text:
         catIds = catIds if type(catIds) == list else [catIds]
 
         if len(imgIds) == len(catIds) == 0:
-            ids = self.imgs.keys()
+            ids = list(self.imgs.keys())
         else:
             ids = set(imgIds)
             if not len(catIds) == 0:
@@ -189,7 +193,7 @@ class COCO_Text:
                 left, top, width, height = ann['bbox']
                 boxes.append(Rectangle([left,top],width,height,alpha=0.4))
             color.append(c)
-            if 'utf8_string' in ann.keys():
+            if 'utf8_string' in list(ann.keys()):
                 ax.annotate(ann['utf8_string'],(left,top-4),color=c)
         p = PatchCollection(boxes, facecolors=color, edgecolors=(0,0,0,1), linewidths=3, alpha=0.4)
         ax.add_collection(p)
@@ -203,7 +207,7 @@ class COCO_Text:
         res = COCO_Text()
         res.dataset['imgs'] = [img for img in self.dataset['imgs']]
 
-        print 'Loading and preparing results...     '
+        print('Loading and preparing results...     ')
         time_t = datetime.datetime.utcnow()
         if type(resFile) == str:
             anns = json.load(open(resFile))
@@ -213,8 +217,8 @@ class COCO_Text:
         annsImgIds = [int(ann['image_id']) for ann in anns]
         
         if set(annsImgIds) != (set(annsImgIds) & set(self.getImgIds())):
-            print 'Results do not correspond to current coco set'
-            print 'skipping ', str(len(set(annsImgIds)) - len(set(annsImgIds) & set(self.getImgIds()))), ' images'
+            print('Results do not correspond to current coco set')
+            print('skipping ', str(len(set(annsImgIds)) - len(set(annsImgIds) & set(self.getImgIds()))), ' images')
         annsImgIds = list(set(annsImgIds) & set(self.getImgIds()))
 
         res.imgToAnns = {cocoid : [] for cocoid in annsImgIds}
@@ -229,6 +233,6 @@ class COCO_Text:
             ann['id'] = id
             res.anns[id] = ann
             res.imgToAnns[ann['image_id']].append(id)
-        print 'DONE (t=%0.2fs)'%((datetime.datetime.utcnow() - time_t).total_seconds())
+        print('DONE (t=%0.2fs)'%((datetime.datetime.utcnow() - time_t).total_seconds()))
 
         return res
